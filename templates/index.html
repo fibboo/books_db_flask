@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{% block title %} Welcome to BookDB {% endblock %}</h1>
+    {% for book in books %}
+        <a href="{{ url_for('book_page', book_id=book['id']) }}">
+            <h2>{{ book['title'] }}</h2>
+            <p>Book has {{ book['number_of_pages'] }} pages</p>
+        </a>
+        <span class="badge badge-primary">{{ book['created'] }}</span>
+        <hr>
+    {% endfor %}
+{% endblock %}
