@@ -1,9 +1,8 @@
 import sqlite3
-from flask import Flask, render_template, request, url_for, flash, redirect
+from flask import render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your secret key'
+from settings import app
 
 
 def get_db_connection():
