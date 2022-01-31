@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="text-center">{% block title %} Add new book {% endblock %} </h1>
+
+    <form method="post">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            {{ form.title.label}}
+            {{ form.title(class='form-control', placeholder='The Hitchhiker\'s Guide to the Galaxy') }}</div>
+        <div class="form-group">
+            {{ form.isbn.label}}
+            {{ form.isbn(class='form-control', placeholder='123456789') }}</div>
+        <div class="form-group">
+            {{ form.number_of_pages.label}}
+            {{ form.number_of_pages(class='form-control', placeholder='208') }}</div>
+        <div class="form-group">
+            {{ form.review.label}}
+            {{ form.review(class='form-control', placeholder='Don\'t panic') }}</div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+{% endblock %}

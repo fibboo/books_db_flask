@@ -1,7 +1,7 @@
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 
-from config import db
-
+db = SQLAlchemy()
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -35,6 +35,7 @@ class Book(db.Model):
     created = db.Column(db.DateTime, default=func.now())
     isbn = db.Column(db.Integer, unique=True, nullable=False)
     title = db.Column(db.String(120), nullable=False)
+    number_of_pages = db.Column(db.Integer, nullable=False)
     review = db.Column(db.Text(), nullable=False)
     # author_id = db.Column(
     #     db.Integer, db.ForeignKey('author.id'), nullable=False)

@@ -2,7 +2,7 @@
 {% block content %}
     <h1 class="text-center">{% block title %} Welcome to BookDB {% endblock %}</h1>
     {% for book in books %}
-        <a href="{{ url_for('book_page', book_id=book['id']) }}">
+        <a href="{{ url_for('.book_page', book_id=book['id']) }}">
             <h2>{{ book['title'] }}</h2>
             <p>Book has {{ book['number_of_pages'] }} pages</p>
         </a>
