@@ -37,9 +37,9 @@ class Book(db.Model):
     title = db.Column(db.String(120), nullable=False)
     number_of_pages = db.Column(db.Integer, nullable=False)
     review = db.Column(db.Text(), nullable=False)
-    # author_id = db.Column(
-    #     db.Integer, db.ForeignKey('author.id'), nullable=False)
-    # author = db.relationship('Author', backref=db.backref('books', lazy=True))
+    author_id = db.Column(
+        db.Integer, db.ForeignKey('author.id'), nullable=False)
+    author = db.relationship('Author', backref=db.backref('books', lazy=True))
 
     def __repr__(self):
         return '<Book %r>' % self.title

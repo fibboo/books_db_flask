@@ -1,12 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1 class="text-center">{% block title %} Welcome to BookDB {% endblock %}</h1>
-    {% for book in books %}
-        <a href="{{ url_for('.book_page', book_id=book['id']) }}">
-            <h2>{{ book['title'] }}</h2>
-            <p>Book has {{ book['number_of_pages'] }} pages</p>
-        </a>
-        <span class="badge badge-primary">Book added to database at {{ book['created'] }}</span>
-        <hr>
-    {% endfor %}
+
+    <div class="row">
+        <div class="col-sm">
+            {% for book in books %}
+                <a href="{{ url_for('.book_page', book_id=book.id) }}">
+                    <h2>{{ book.title }}</h2>
+                    <p>{{ book.isbn }}</p>
+                    <p>Book has {{ book.number_of_pages }} pages</p>
+                </a>
+                <p>Author: {{ book.author }}</p>
+                <span class="badge badge-primary">Book added to database at {{ book.created }}</span>
+                <hr>
+            {% endfor %}
+        </div>
+        <div class="col-sm">
+            {% for author in authors %}
+                <a href="{{ url_for('.author_page', author_id=author.id) }}">
+                    <h2>{{ author.fio }}</h2>
+                    <p>ISBN: {{ author.isbn }}</p>
+                </a>
+                <span class="badge badge-primary">Book added to database at {{ author.created }}</span>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+
 {% endblock %}

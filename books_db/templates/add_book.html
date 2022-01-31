@@ -6,19 +6,25 @@
     <form method="post">
         {{ form.csrf_token }}
         <div class="form-group">
-            {{ form.title.label}}
+            {{ form.title.label }}
             {{ form.title(class='form-control', placeholder='The Hitchhiker\'s Guide to the Galaxy') }}</div>
         <div class="form-group">
-            {{ form.isbn.label}}
+            {{ form.isbn.label }}
             {{ form.isbn(class='form-control', placeholder='123456789') }}</div>
         <div class="form-group">
-            {{ form.number_of_pages.label}}
+            {{ form.number_of_pages.label }}
             {{ form.number_of_pages(class='form-control', placeholder='208') }}</div>
         <div class="form-group">
-            {{ form.review.label}}
+            {{ form.review.label }}
             {{ form.review(class='form-control', placeholder='Don\'t panic') }}</div>
+        <div class="form-group">
+            {{ form.author.label }}
+            {{ form.author(class='form-control') }}</div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
+        <a href="{{ url_for('.add_author', return='.add_book') }}">
+            <button type="button" class="btn btn-warning">Add new author</button>
+        </a>
     </form>
 {% endblock %}

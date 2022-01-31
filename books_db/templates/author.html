@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2 class="text-center">{% block fio %} {{ author.fio }} {% endblock %}</h2>
+    <p class="text-center"><span class="badge badge-primary">Author added to database at {{ author.created }}</span></p>
+    <p class="text-center">ISBN: {{ author.isbn }}</p>
+    <a href="{{ url_for('.edit_author', author_id=author.id) }}">
+        <button type="button" class="btn btn-warning">Edit</button>
+    </a>
+    <hr>
+    {% for book in author.books %}
+        <a href="{{ url_for('.book_page', book_id=book.id) }}">
+            <h2>{{ book.title }}</h2>
+            <p>{{ book.isbn }}</p>
+            <p>Book has {{ book.number_of_pages }} pages</p>
+        </a>
+        <span class="badge badge-primary">Book added to database at {{ book.created }}</span>
+        <hr>
+    {% endfor %}
+{% endblock %}
