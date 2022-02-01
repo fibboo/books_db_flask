@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1 class="text-center">{% block title %} Edit book "{{ book['title'] }}" {% endblock %} </h1>
+    <h1 class="text-center">{% block title %} Edit author "{{ author.fio }}" {% endblock %} </h1>
 
     <form method="post">
         {{ form.csrf_token }}
@@ -14,7 +14,7 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </form>
-    <form action="{{ url_for('.delete', author_id=author.id) }}" method="POST">
+    <form action="{{ url_for('.author_delete', author_id=author.id) }}" method="POST">
         <input type="submit" value="Delete Author" class="btn btn-danger btn-sm"
                onclick="return confirm('Are you sure you want to delete this author?')">
     </form>

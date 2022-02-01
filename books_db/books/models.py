@@ -1,23 +1,9 @@
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 
-db = SQLAlchemy()
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    created = db.Column(db.DateTime, default=func.now())
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80), nullable=False)
-
-    def __repr__(self):
-        return '<User %r>' % self.username
-
-    def __str__(self):
-        return self.username
+from data import db, CRUDMixin
 
 
-class Author(db.Model):
+class Author(CRUDMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created = db.Column(db.DateTime, default=func.now())
     isbn = db.Column(db.Integer, unique=True, nullable=False)
@@ -30,7 +16,7 @@ class Author(db.Model):
         return self.fio
 
 
-class Book(db.Model):
+class Book(CRUDMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created = db.Column(db.DateTime, default=func.now())
     isbn = db.Column(db.Integer, unique=True, nullable=False)

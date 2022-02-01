@@ -6,7 +6,7 @@ from .models import Author
 
 
 class BookForm(FlaskForm):
-    isbn = fields.IntegerField('ISBN',[validators.input_required()])
+    isbn = fields.IntegerField('ISBN', [validators.input_required()])
     title = fields.StringField('Title', [validators.input_required(),
                                          validators.Length(max=120)])
     number_of_pages = fields.IntegerField(

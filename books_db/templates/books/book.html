@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2 class="text-center">{% block title %} {{ book.title }} {% endblock %}</h2>
+    <h2 class="text-center">{% block title %} {{ book.title }} by {{ book.author.fio }} {% endblock %}</h2>
     <p class="text-center"><span class="badge badge-primary">Book added to database at {{ book.created }}</span></p>
     <p class="text-center">Book has {{ book.number_of_pages }} pages</p>
     <p>{{ book.review }}</p>
