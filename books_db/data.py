@@ -11,6 +11,7 @@ class CRUDMixin(object):
     @classmethod
     def create(cls, commit=True, **kwargs):
         kwargs.pop('csrf_token')
+        print(kwargs)
         instance = cls(**kwargs)
         return instance.save(commit=commit)
 

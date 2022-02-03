@@ -8,7 +8,7 @@ class Author(CRUDMixin, db.Model):
     created = db.Column(db.DateTime, default=func.now())
     isbn = db.Column(db.Integer, unique=True, nullable=False)
     fio = db.Column(db.String(80), nullable=False)
-
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
         return '<Author %r>' % self.fio
@@ -31,6 +31,7 @@ class Book(CRUDMixin, db.Model):
     author = db.relationship('Author', backref=db.backref(
         'books', lazy=True, cascade='all, delete-orphan',
     ))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
         return '<Book %r>' % self.title

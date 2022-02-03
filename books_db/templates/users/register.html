@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% import "helpers/forms.html" as forms %}
+{% block title %}Register on BookDB!{% endblock %}
+{% block content %}
+    {{ super() }}
+    <form action="{{ url_for('users.register') }}" method="POST">
+        {{ forms.render(form) }}
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </div>
+    </form>
+{% endblock content %}

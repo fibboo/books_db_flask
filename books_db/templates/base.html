@@ -13,19 +13,33 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-light bg-light">
-    <a class="navbar-brand" href="{{ url_for('.index') }}">BlogDB</a>
+    <a class="navbar-brand" href="{{ url_for('books.index') }}">BlogDB</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-            <li class="navbar-nav">
-                <a class="nav-link" href="{{ url_for('.add_book') }}">Add new book</a>
-            </li>
-            <li class="navbar-nav">
-                <a class="nav-link" href="{{ url_for('.add_author', return='.index') }}">Add new author</a>
-            </li>
+            {% if current_user.is_authenticated %}
+                <li class="navbar-nav">
+                    <a class="nav-link" href="{{ url_for('users.logout') }}">Log out</a>
+                </li>
+                <li class="navbar-nav">
+                    <a class="nav-link" href="{{ url_for('books.add_book') }}">Add new book</a>
+                </li>
+                <li class="navbar-nav">
+                    <a class="nav-link" href="{{ url_for('books.add_author', return='books.index') }}">Add new
+                        author</a>
+                </li>
+            {% else %}
+
+                <li class="navbar-nav">
+                    <a class="nav-link" href="{{ url_for('users.login') }}">Sign In</a>
+                </li>
+                <li class="navbar-nav">
+                    <a class="nav-link" href="{{ url_for('users.register') }}">Sign Up</a>
+                </li>
+            {% endif %}
             <li class="nav-item active">
                 <a class="nav-link" href="#">About</a>
             </li>

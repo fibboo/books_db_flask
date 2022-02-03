@@ -1,7 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_user, login_required, logout_user
 
-from data import db
 from users.forms import LoginForm, RegistrationForm
 from users.models import User
 
@@ -14,7 +13,7 @@ def login():
     if form.validate_on_submit():
         login_user(form.user)
         flash("Logged in successfully.")
-        return redirect(request.args.get("next") or url_for("tracking.index"))
+        return redirect(request.args.get("next") or url_for("books.index"))
     return render_template('users/login.html', form=form)
 
 
@@ -24,7 +23,7 @@ def register():
     if form.validate_on_submit():
         user = User.create(**form.data)
         login_user(user)
-        return redirect(url_for('tracking.index'))
+        return redirect(url_for('books.index'))
     return render_template('users/register.html', form=form)
 
 
@@ -32,4 +31,4 @@ def register():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('tracking.index'))
+    return redirect(url_for('books.index'))

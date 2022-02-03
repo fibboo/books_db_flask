@@ -5,7 +5,11 @@
     <p class="text-center">Book has {{ book.number_of_pages }} pages</p>
     <p>{{ book.review }}</p>
     <hr>
-    <a href="{{ url_for('.edit_book', book_id=book.id) }}">
-        <button type="button" class="btn btn-warning">Edit</button>
-    </a>
+    {% if current_user.is_authenticated %}
+        {% if current_user.id == book.user_id %}
+            <a href="{{ url_for('books.edit_book', book_id=book.id) }}">
+                <button type="button" class="btn btn-warning">Edit</button>
+            </a>
+        {% endif %}
+    {% endif %}
 {% endblock %}

@@ -1,6 +1,6 @@
+import random
 from hashlib import pbkdf2_hmac
 from hmac import compare_digest
-from random import SystemRandom
 
 from flask_login import UserMixin
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -14,8 +14,8 @@ class User(UserMixin, CRUDMixin, db.Model):
     email = db.Column(db.String(120), unique=True)
     _password = db.Column(db.LargeBinary(120))
     _salt = db.Column(db.String(120))
-    # books = db.relationship('Book', backref='owner', lazy='dynamic')
-    # author = db.relationship('Author', backref='owner', lazy='dynamic')
+    books = db.relationship('Book', backref='owner', lazy='dynamic')
+    authors = db.relationship('Author', backref='owner', lazy='dynamic')
 
     @hybrid_property
     def password(self):
@@ -24,7 +24,7 @@ class User(UserMixin, CRUDMixin, db.Model):
     @password.setter
     def password(self, value):
         if self._salt is None:
-            self._salt = bytes(SystemRandom().getrandbits(128))
+            self._salt = bytes(random.randrange(0, 255) for _ in range(128))
         self._password = self._hash_password(value)
 
     def is_valid_password(self, password):
@@ -49,3 +49,6 @@ class User(UserMixin, CRUDMixin, db.Model):
 
     def __repr__(self):
         return "<User #{:d}>".format(self.id)
+
+    def __str__(self):
+        return self.name
