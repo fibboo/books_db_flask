@@ -9,6 +9,7 @@ class Author(CRUDMixin, db.Model):
     isbn = db.Column(db.Integer, unique=True, nullable=False)
     fio = db.Column(db.String(80), nullable=False)
 
+
     def __repr__(self):
         return '<Author %r>' % self.fio
 
@@ -24,8 +25,12 @@ class Book(CRUDMixin, db.Model):
     number_of_pages = db.Column(db.Integer, nullable=False)
     review = db.Column(db.Text(), nullable=False)
     author_id = db.Column(
-        db.Integer, db.ForeignKey('author.id'), nullable=False)
-    author = db.relationship('Author', backref=db.backref('books', lazy=True))
+        db.Integer, db.ForeignKey(
+            'author.id', ondelete='CASCADE'), nullable=False,
+    )
+    author = db.relationship('Author', backref=db.backref(
+        'books', lazy=True, cascade='all, delete-orphan',
+    ))
 
     def __repr__(self):
         return '<Book %r>' % self.title
