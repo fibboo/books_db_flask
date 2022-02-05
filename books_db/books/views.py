@@ -66,7 +66,6 @@ def add_author():
 def edit_book(book_id):
     book = Book.get_or_404(book_id)
     form = BookForm(obj=book)
-    print(book.user_id)
 
     if book.user_id != current_user.id:
         flash('You are not allowed')

@@ -3,7 +3,6 @@ from sqlalchemy import func
 from data import db, CRUDMixin
 
 
-
 class Author(CRUDMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created = db.Column(db.DateTime, default=func.now())

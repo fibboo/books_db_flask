@@ -10,8 +10,8 @@ class CRUDMixin(object):
 
     @classmethod
     def create(cls, commit=True, **kwargs):
-        kwargs.pop('csrf_token')
-        print(kwargs)
+        if kwargs.get('csrf_token') is not None:
+            kwargs.pop('csrf_token')
         instance = cls(**kwargs)
         return instance.save(commit=commit)
 
