@@ -23,16 +23,11 @@ def owner_serializer(obj):
     }
 
 
-def authors_serializer(query):
-    return [author_serializer(obj) for obj in query]
-
-
-def book_to_dict(obj, no_author):
+def book_serializer(obj, no_author):
     if no_author:
         return {
             'id': obj.id,
             'created': dump_datetime(obj.created),
-            # 'published': dump_datetime(obj.published),
             'isbn': obj.isbn,
             'title': obj.title,
             'number_of_pages': obj.number_of_pages,
@@ -42,7 +37,6 @@ def book_to_dict(obj, no_author):
     return {
         'id': obj.id,
         'created': dump_datetime(obj.created),
-        # 'published': dump_datetime(obj.published),
         'isbn': obj.isbn,
         'title': obj.title,
         'number_of_pages': obj.number_of_pages,
@@ -52,5 +46,11 @@ def book_to_dict(obj, no_author):
     }
 
 
-def book_serializer(obj, no_author):
-    return book_to_dict(obj, no_author)
+def user_serializer(obj):
+    return {
+        'id': obj.id,
+        'name': obj.name,
+        'email': obj.email,
+        'books': [book_serializer(book, False) for book in obj.books],
+        'authors': [author_serializer(author) for author in obj.authors],
+    }

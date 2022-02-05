@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_migrate import Migrate
 
 from api.views import api
 from auth import login_manager
@@ -8,6 +9,8 @@ from users.views import users
 
 app = Flask(__name__)
 app.config.from_object('config')
+
+migrate = Migrate(app, db)
 
 
 db.init_app(app)
