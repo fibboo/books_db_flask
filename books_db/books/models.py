@@ -20,6 +20,7 @@ class Author(CRUDMixin, db.Model):
 class Book(CRUDMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created = db.Column(db.DateTime, default=func.now())
+    # published = db.Column(db.DateTime, nullable=False)
     isbn = db.Column(db.Integer, unique=True, nullable=False)
     title = db.Column(db.String(120), nullable=False)
     number_of_pages = db.Column(db.Integer, nullable=False)

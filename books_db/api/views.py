@@ -1,5 +1,4 @@
 from flask import Blueprint, jsonify, make_response, request, abort
-from wtforms import ValidationError
 
 from api import serializers
 from api import validators
@@ -11,25 +10,18 @@ api = Blueprint('api', __name__)
 
 @api.route('/api/books', methods=('GET',))
 def get_books():
-    return jsonify(serializers.books_serializer(Book.query.all()))
+    no_author = request.values.get('no_author')
+    books = Book.query.all()
+    serialized_data = [serializers.book_serializer(obj, no_author)
+                       for obj in books]
+    return jsonify(serialized_data)
 
 
 @api.route('/api/books/<int:book_id>', methods=('GET',))
 def get_book(book_id):
+    no_author = request.values.get('no_author')
     book = Book.get_or_404(book_id)
-    return jsonify(serializers.book_serializer(book))
-
-
-@api.route('/api/books-without-author', methods=('GET',))
-def get_books_without_author():
-    books = Book.query.all()
-    return jsonify(serializers.books_without_author_serializer(books))
-
-
-@api.route('/api/books-without-author/<int:book_id>', methods=('GET',))
-def get_book_without_author(book_id):
-    book = Book.get_or_404(book_id)
-    return jsonify(serializers.book_without_author_serializer(book))
+    return jsonify(serializers.book_serializer(book, no_author))
 
 
 @api.route('/api/books', methods=('POST',))
