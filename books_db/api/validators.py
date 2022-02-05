@@ -65,7 +65,9 @@ def author_validator(json_data, is_update=False, author=None):
 
 
 def user_validator(json_data, is_update=False, user=None):
-    required_fields = {'username': str, 'email': str, 'password': str}
+    required_fields = {'username': str, 'email': str}
+    if not user:
+        required_fields.update({'password': str})
     validate_required_fields(required_fields, json_data)
 
     if not is_update:

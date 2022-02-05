@@ -51,7 +51,7 @@ class User(UserMixin, CRUDMixin, db.Model):
         return "<User #{:d}>".format(self.id)
 
     def __str__(self):
-        return self.name
+        return self.username
 
 
 def authenticate(username, password):

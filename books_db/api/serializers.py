@@ -12,13 +12,14 @@ def author_serializer(obj):
         'created': dump_datetime(obj.created),
         'isbn': obj.isbn,
         'fio': obj.fio,
+        'owner': owner_serializer(obj.owner),
     }
 
 
 def owner_serializer(obj):
     return {
         'id': obj.id,
-        'name': obj.name,
+        'username': obj.username,
         'email': obj.email,
     }
 
@@ -31,7 +32,7 @@ def book_serializer(obj, with_author=False):
         'title': obj.title,
         'number_of_pages': obj.number_of_pages,
         'review': obj.review,
-        'owner': obj.owner.name,
+        'owner': owner_serializer(obj.owner),
     }
     if with_author:
         serialized_data.update({'author': author_serializer(obj.author)})
