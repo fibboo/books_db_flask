@@ -10,7 +10,7 @@ from data import db, CRUDMixin
 
 class User(UserMixin, CRUDMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
+    username = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(120), unique=True)
     _password = db.Column(db.LargeBinary(120))
     _salt = db.Column(db.String(120))
@@ -52,3 +52,14 @@ class User(UserMixin, CRUDMixin, db.Model):
 
     def __str__(self):
         return self.name
+
+
+def authenticate(username, password):
+    user = User.query.filter_by(username=username).first()
+    if user and user.is_valid_password(password):
+        return user
+
+
+def identity(payload):
+    user_id = payload['identity']
+    return User.get_or_404(user_id)

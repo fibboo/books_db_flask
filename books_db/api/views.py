@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, make_response, request, abort
+from flask_jwt import jwt_required, current_identity
 
 from api import serializers
 from api import validators
@@ -10,9 +11,9 @@ api = Blueprint('api', __name__)
 
 @api.route('/api/books', methods=('GET',))
 def get_books():
-    no_author = request.values.get('no_author')
+    with_author = request.values.get('with_author')
     books = Book.query.all()
-    serialized_data = [serializers.book_serializer(obj, no_author)
+    serialized_data = [serializers.book_serializer(obj, with_author)
                        for obj in books]
     return jsonify(serialized_data)
 
@@ -25,17 +26,19 @@ def get_book(book_id):
 
 
 @api.route('/api/books', methods=('POST',))
+@jwt_required()
 def create_book():
     if not request.json:
         abort(make_response(jsonify({'400': 'Bad request, not a JSON'}), 400))
     book = Book.create(
-        owner=User.get_or_404(1),
+        owner=current_identity,
         **validators.book_validator(request.json)
     )
-    return jsonify(serializers.book_serializer(book)), 201
+    return jsonify(serializers.book_serializer(book, True)), 201
 
 
 @api.route('/api/books/<int:book_id>', methods=('PUT',))
+@jwt_required()
 def update_book(book_id):
     if not request.json:
         abort(make_response(jsonify({'400': 'Bad request, not a JSON'}), 400))
@@ -45,6 +48,7 @@ def update_book(book_id):
 
 
 @api.route('/api/books/<int:book_id>', methods=('DELETE',))
+@jwt_required()
 def delete_book(book_id):
     book = Book.get_or_404(book_id)
     book.delete()
@@ -67,16 +71,18 @@ def authors(author_id):
 
 
 @api.route('/api/authors', methods=('POST',))
+@jwt_required()
 def create_author():
     if not request.json:
         abort(make_response(jsonify({'400': 'Bad request, not a JSON'}), 400))
     author = Author.create(
-        owner=User.get_or_404(1), **validators.author_validator(request.json)
+        owner=current_identity, **validators.author_validator(request.json)
     )
     return jsonify(serializers.author_serializer(author)), 201
 
 
 @api.route('/api/authors/<int:author_id>', methods=('PUT',))
+@jwt_required()
 def update_author(author_id):
     if not request.json:
         abort(make_response(jsonify({'400': 'Bad request, not a JSON'}), 400))
@@ -86,6 +92,7 @@ def update_author(author_id):
 
 
 @api.route('/api/authors/<int:author_id>', methods=('DELETE',))
+@jwt_required()
 def delete_author(author_id):
     author = Author.get_or_404(author_id)
     author.delete()
@@ -97,8 +104,10 @@ def delete_author(author_id):
 @api.route('/api/users', methods=('GET',))
 def get_users():
     users = User.query.all()
-    serialized_data = [serializers.user_serializer(obj)
-                       for obj in users]
+    with_authors = request.values.get('with_authors')
+    with_books = request.values.get('with_books')
+    serialized_data = [serializers.user_serializer(
+        obj, with_authors, with_books) for obj in users]
     return jsonify(serialized_data)
 
 
@@ -118,6 +127,7 @@ def create_user():
 
 
 @api.route('/api/users/<int:user_id>', methods=('PUT',))
+@jwt_required()
 def update_user(user_id):
     if not request.json:
         abort(make_response(jsonify({'400': 'Bad request, not a JSON'}), 400))
@@ -127,6 +137,7 @@ def update_user(user_id):
 
 
 @api.route('/api/users/<int:user_id>', methods=('DELETE',))
+@jwt_required()
 def delete_user(user_id):
     user = User.get_or_404(user_id)
     user.delete()

@@ -65,20 +65,31 @@ def author_validator(json_data, is_update=False, author=None):
 
 
 def user_validator(json_data, is_update=False, user=None):
-    required_fields = {'name': str, 'email': str}
+    required_fields = {'username': str, 'email': str, 'password': str}
     validate_required_fields(required_fields, json_data)
 
     if not is_update:
-        if not is_unique(
-                User.query.filter_by(email=json_data['email']).all()
-        ):
+        if not is_unique(User.query.filter_by(email=json_data['email']).all()):
             abort(
                 make_response(jsonify({'email': 'Field must be unique'}), 400)
+            )
+        if not is_unique(
+                User.query.filter_by(username=json_data['username']).all()
+        ):
+            abort(
+                make_response(jsonify({'username': 'Field must be unique'}),
+                              400)
             )
     elif user.email != json_data['email']:
         if not is_unique(User.query.filter_by(email=json_data['email']).all()):
             abort(make_response(
                 jsonify({'email': 'Field must be unique'}), 400)
+            )
+    elif user.username != json_data['username']:
+        if not is_unique(
+                User.query.filter_by(email=json_data['username']).all()):
+            abort(make_response(
+                jsonify({'username': 'Field must be unique'}), 400)
             )
 
     return json_data
