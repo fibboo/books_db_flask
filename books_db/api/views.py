@@ -121,7 +121,11 @@ def get_users():
 @api.route('/api/users/<int:user_id>', methods=('GET',))
 def get_user(user_id):
     user = User.get_or_404(user_id)
-    serialized_data = serializers.user_serializer(user)
+    with_authors = request.values.get('with_authors')
+    with_books = request.values.get('with_books')
+    serialized_data = serializers.user_serializer(
+        user, with_authors, with_books
+    )
     return jsonify(serialized_data)
 
 
