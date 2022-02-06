@@ -56,7 +56,7 @@ class User(UserMixin, CRUDMixin, db.Model):
 
 def authenticate(username, password):
     user = User.query.filter_by(username=username).first()
-    if user and user.is_valid_password(password):
+    if user and user.is_valid_password(password): # noqa R503
         return user
 
 
