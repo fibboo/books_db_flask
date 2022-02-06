@@ -12,7 +12,7 @@ services:
     env_file:
       - ./.env
   web:
-    image: fibboo/books_db_flask:latest
+    image: fibboo/books-db-flask:latest
     restart: always
     depends_on:
       - db
