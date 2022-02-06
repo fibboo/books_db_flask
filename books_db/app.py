@@ -20,8 +20,8 @@ def create_app(test_config=None):
         # load the test config if passed in
         app.config.update(test_config)
 
-    migrate = Migrate(app, db)
-    jwt = JWT(app, authenticate, identity)
+    migrate = Migrate(app, db)  # noqa: F841
+    jwt = JWT(app, authenticate, identity)  # noqa: F841
 
     db.init_app(app)
     login_manager.init_app(app)

@@ -68,4 +68,3 @@ def test_post_users(anonymous_client):
     assert response_data.get('username') == data['username'], (
         f'Check if POST request to `{url}` with valid data returns `username`.'
     )
-

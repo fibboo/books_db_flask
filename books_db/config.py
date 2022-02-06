@@ -27,6 +27,4 @@ else:
     DB_NAME = os.getenv('DB_NAME', default='books_db')
     DB_HOST = os.getenv('DB_HOST', default='db')
     DB_PORT = os.getenv('DB_PORT', default='5432')
-    SQLALCHEMY_DATABASE_URI = (
-            'postgresql://' + POSTGRES_USER + ':' + POSTGRES_PASSWORD +
-            '@' + DB_HOST + ':' + DB_PORT + '/' + DB_NAME)
+    SQLALCHEMY_DATABASE_URI = ('postgresql://' + POSTGRES_USER + ':' + POSTGRES_PASSWORD + '@' + DB_HOST + ':' + DB_PORT + '/' + DB_NAME)  # noqa: E501
