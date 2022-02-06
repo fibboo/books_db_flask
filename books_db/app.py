@@ -10,13 +10,18 @@ from users.models import authenticate, identity
 from users.views import users
 
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__)
-    app.config.from_object('config')
+
+    if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_object('config')
+    else:
+        # load the test config if passed in
+        app.config.update(test_config)
 
     migrate = Migrate(app, db)
     jwt = JWT(app, authenticate, identity)
-
 
     db.init_app(app)
     login_manager.init_app(app)
@@ -25,3 +30,6 @@ def create_app():
     app.register_blueprint(users)
     app.register_blueprint(api)
     return app
+
+
+app = create_app()
