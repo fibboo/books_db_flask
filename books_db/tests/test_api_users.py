@@ -1,16 +1,12 @@
-import json
-
 from flask import url_for
 
 from data import db
 from users.models import User
 
 
-def test_get_users(anonymous_client, test_user1, test_book1, test_author1):
-    url = url_for('api.get_users')
-    url_with_related = url_for(
-        'api.get_users', with_authors=True, with_books=True
-    )
+def test_get_users_no_related(anonymous_client, test_user1):
+    url_users = url_for('api.get_users')
+    url_one_user = url_for('api.get_user', user_id=test_user1.id)
 
     valid_response = {
         "email": test_user1.email,
@@ -18,11 +14,27 @@ def test_get_users(anonymous_client, test_user1, test_book1, test_author1):
         "username": test_user1.username
     }
 
-    response = anonymous_client.get(url)
+    response = anonymous_client.get(url_users)
     assert response.status_code == 200
-    assert response.status_code != 404, f'Endpoint `{url}` not found'
+    assert response.status_code != 404, f'Endpoint `{url_users}` not found'
     assert response.json == [valid_response], (
-        f'Check is GET request to `{url}` returns right response'
+        f'Check is GET request to `{url_users}` returns right response'
+    )
+
+    response = anonymous_client.get(url_one_user)
+    assert response.status_code == 200
+    assert response.status_code != 404, f'Endpoint `{url_users}` not found'
+    assert response.json == valid_response, (
+        f'Check is GET request to `{url_users}` returns right response'
+    )
+
+
+def test_get_users_with_related(anonymous_client, test_user1,
+                                test_book1, test_author1):
+    url_users = url_for('api.get_users', with_authors=True, with_books=True)
+    url_one_user = url_for(
+        'api.get_user', user_id=test_user1.id,
+        with_authors=True, with_books=True,
     )
 
     valid_response = {
@@ -53,11 +65,18 @@ def test_get_users(anonymous_client, test_user1, test_book1, test_author1):
         "username": test_user1.username
     }
 
-    response = anonymous_client.get(url_with_related)
-    print(response.json)
-    print(valid_response)
+    response = anonymous_client.get(url_users)
+    assert response.status_code == 200
+    assert response.status_code != 404, f'Endpoint `{url_users}` not found'
     assert response.json == [valid_response], (
-        f'Check is GET request to `{url_with_related}` returns right response'
+        f'Check is GET request to `{url_users}` returns right response'
+    )
+
+    response = anonymous_client.get(url_one_user)
+    assert response.status_code == 200
+    assert response.status_code != 404, f'Endpoint `{url_users}` not found'
+    assert response.json == valid_response, (
+        f'Check is GET request to `{url_users}` returns right response'
     )
 
 
@@ -123,4 +142,11 @@ def test_post_users(anonymous_client, test_user1):
     user_count_after = db.session.query(User).count()
     assert user_count_before < user_count_after, (
         f'Check if POST request to `{url}` creates user.'
+    )
+
+
+def test_update_user_anonymous(anonymous_client, test_user1):
+    url = url_for('api.update_user', user_id=test_user1.id)
+    assert anonymous_client.put(url).status_code == 401, (
+        f'Check if PUT request to `{url}` is available only for authorized'
     )
