@@ -12,7 +12,6 @@ from users.models import User
 def app():
     db_fd, db_path = tempfile.mkstemp()
     app = create_app({'TESTING': True, 'DATABASE': db_path})
-    db.init_app(app)
 
     with app.app_context():
         db.create_all(app=app)
@@ -29,7 +28,7 @@ def anonymous_client(app):
 
 
 @pytest.fixture
-def test_user1():
+def test_user1(anonymous_client):
     return User.create(
         username='TestUser1', email='testuser1@books.db',
         password='1234567',
