@@ -1,16 +1,68 @@
+import json
+
+from flask import url_for
+
 from data import db
 from users.models import User
 
 
-def test_get_users(anonymous_client):
-    url = '/api/users'
+def test_get_users(anonymous_client, test_user1, test_book1, test_author1):
+    url = url_for('api.get_users')
+    url_with_related = url_for(
+        'api.get_users', with_authors=True, with_books=True
+    )
+
+    valid_response = {
+        "email": test_user1.email,
+        "id": test_user1.id,
+        "username": test_user1.username
+    }
+
     response = anonymous_client.get(url)
     assert response.status_code == 200
     assert response.status_code != 404, f'Endpoint `{url}` not found'
+    assert response.json == [valid_response], (
+        f'Check is GET request to `{url}` returns right response'
+    )
+
+    valid_response = {
+        "authors": [
+            {
+                "created": test_author1.created.strftime(
+                    '%Y-%m-%d %H:%M:%S'
+                ),
+                "fio": test_author1.fio,
+                "id": test_author1.id,
+                "isbn": test_author1.isbn
+            }
+        ],
+        "books": [
+            {
+                "created": test_book1.created.strftime(
+                    '%Y-%m-%d %H:%M:%S'
+                ),
+                "id": test_book1.id,
+                "isbn": test_book1.isbn,
+                "number_of_pages": test_book1.number_of_pages,
+                "review": test_book1.review,
+                "title": test_book1.title
+            }
+        ],
+        "email": test_user1.email,
+        "id": test_user1.id,
+        "username": test_user1.username
+    }
+
+    response = anonymous_client.get(url_with_related)
+    print(response.json)
+    print(valid_response)
+    assert response.json == [valid_response], (
+        f'Check is GET request to `{url_with_related}` returns right response'
+    )
 
 
 def test_post_users(anonymous_client, test_user1):
-    url = '/api/users'
+    url = url_for('api.create_user')
     empty_data = {}
     user_count_before = db.session.query(User).count()
 

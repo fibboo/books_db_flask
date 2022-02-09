@@ -113,6 +113,8 @@ def get_users():
     users = User.query.all()
     with_authors = request.values.get('with_authors')
     with_books = request.values.get('with_books')
+    print(with_books)
+    print(with_authors)
     serialized_data = [serializers.user_serializer(
         obj, with_authors, with_books) for obj in users]
     return jsonify(serialized_data)

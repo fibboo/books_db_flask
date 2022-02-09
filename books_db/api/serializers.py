@@ -6,16 +6,6 @@ def dump_datetime(value):
     return value.strftime('%Y-%m-%d %H:%M:%S')
 
 
-def author_serializer(obj):
-    return {
-        'id': obj.id,
-        'created': dump_datetime(obj.created),
-        'isbn': obj.isbn,
-        'fio': obj.fio,
-        'owner': owner_serializer(obj.owner),
-    }
-
-
 def owner_serializer(obj):
     return {
         'id': obj.id,
@@ -24,7 +14,19 @@ def owner_serializer(obj):
     }
 
 
-def book_serializer(obj, with_author=False):
+def author_serializer(obj, owner=False):
+    serialized_data = {
+        'id': obj.id,
+        'created': dump_datetime(obj.created),
+        'isbn': obj.isbn,
+        'fio': obj.fio,
+    }
+    if owner:
+        serialized_data.update({'owner': owner_serializer(obj.owner)})
+    return serialized_data
+
+
+def book_serializer(obj, with_author=False, owner=False):
     serialized_data = {
         'id': obj.id,
         'created': dump_datetime(obj.created),
@@ -32,10 +34,11 @@ def book_serializer(obj, with_author=False):
         'title': obj.title,
         'number_of_pages': obj.number_of_pages,
         'review': obj.review,
-        'owner': owner_serializer(obj.owner),
     }
     if with_author:
         serialized_data.update({'author': author_serializer(obj.author)})
+    if owner:
+        serialized_data.update({'owner': owner_serializer(obj.owner)})
     return serialized_data
 
 
