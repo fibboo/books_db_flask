@@ -150,3 +150,10 @@ def test_update_user_anonymous(anonymous_client, test_user1):
     assert anonymous_client.put(url).status_code == 401, (
         f'Check if PUT request to `{url}` is available only for authorized'
     )
+
+
+# def test_update_another_user(authorized_client, test_user2):
+#     url = url_for('api.update_user', user_id=test_user2.id)
+#     assert authorized_client.put(url).status_code == 403, (
+#         f'Check if PUT request to `{url}` is available only for authorized'
+#     )
