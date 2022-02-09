@@ -12,6 +12,7 @@ from users.models import User
 def app():
     db_fd, db_path = tempfile.mkstemp()
     app = create_app({'TESTING': True, 'DATABASE': db_path})
+    db.init_app(app)
 
     with app.app_context():
         db.create_all(app=app)
