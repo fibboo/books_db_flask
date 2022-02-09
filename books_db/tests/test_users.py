@@ -1,3 +1,4 @@
+from data import db
 from users.models import User
 
 
@@ -8,9 +9,11 @@ def test_get_users(anonymous_client):
     assert response.status_code != 404, f'Endpoint `{url}` not found'
 
 
-def test_post_users(anonymous_client):
+def test_post_users(anonymous_client, test_user1):
     url = '/api/users'
     empty_data = {}
+    user_count_before = db.session.query(User).count()
+
     response = anonymous_client.post(url, json=empty_data)
     assert response.status_code == 400, (
         f'Check if POST request to `{url}` with empty data returns 400'
@@ -22,9 +25,6 @@ def test_post_users(anonymous_client):
     response = anonymous_client.post(url, json=no_email_data)
     assert response.status_code == 400, (
         f'Check if POST request to `{url}` with no email returns 400'
-    )
-    test_user1 = User.create(
-        username='TestUser1', email='testuser1@books.db', password='1234567',
     )
     duplicate_email = {
         'username': 'TestUser_duplicate',
@@ -67,4 +67,8 @@ def test_post_users(anonymous_client):
     )
     assert response_data.get('username') == data['username'], (
         f'Check if POST request to `{url}` with valid data returns `username`.'
+    )
+    user_count_after = db.session.query(User).count()
+    assert user_count_before < user_count_after, (
+        f'Check if POST request to `{url}` creates user.'
     )
