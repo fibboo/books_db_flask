@@ -14,10 +14,7 @@ create new user, get auth token. Authenticated user can create
 new books and authors, update and delete self, books, authors that created.
 <br>
 When you run project (how to do it a bit later), you can look documentation
-on API here
-```
-http://localhost/api/docs/
-```
+on API here <strong>http://localhost/api/docs/</strong>
 
 ## To-do
 - Optimise views, serializers, and validator. DRY is violated in several places.
